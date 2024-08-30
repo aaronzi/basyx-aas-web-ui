@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-    import { defineComponent } from 'vue';
+    import { defineComponent } from 'vue'
     import { useRoute, useRouter } from 'vue-router';
     import AppNavigation from '@/components/AppNavigation/AppNavigation.vue';
     import RequestHandling from '@/mixins/RequestHandling';
