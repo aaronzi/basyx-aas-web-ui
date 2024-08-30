@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <!-- App Navigation and it's sub-Components (AASList, etc.) -->
+        <!-- App Navigation and its sub-Components (AASList, etc.) -->
         <AppNavigation />
         <v-main style="padding-top: 33px">
             <!-- App Content (eg. MainWindow, etc.) -->
