@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-    import { defineComponent } from 'vue'
+    import { defineComponent } from 'vue';
     import { useRoute, useRouter } from 'vue-router';
     import { useNavigationStore } from '@/store/NavigationStore';
     import { useAASStore } from '@/store/AASDataStore';
