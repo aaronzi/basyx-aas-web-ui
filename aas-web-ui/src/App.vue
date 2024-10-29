@@ -15,7 +15,7 @@
 
 <script lang="ts" setup>
     import { onMounted } from 'vue';
-    import { useRoute, useRouter } from 'vue-router';
+    import { RouteRecordNameGeneric, useRoute, useRouter } from 'vue-router';
     import { useDisplay } from 'vuetify';
     import AppNavigation from '@/components/AppNavigation/AppNavigation.vue';
     import { useAASStore } from '@/store/AASDataStore';
@@ -88,43 +88,42 @@
 
     // Handle mobile view routing logic
     function handleMobileView(aasEndpoint: string | null, submodelElementPath: string | null) {
-        if (route.name === 'MainWindow') {
+        const currentRouteName = route.name;
+        const routesToAASList: Array<RouteRecordNameGeneric> = ['MainWindow', 'AASViewer', 'AASList'];
+
+        if (currentRouteName && routesToAASList.includes(currentRouteName)) {
+            // Redirect to 'AASList' with existing query parameters
             router.push({ name: 'AASList', query: route.query });
-        } else if (route.name === 'AASList') {
-            router.push({ name: 'AASList', query: route.query });
-        } else if (route.name === 'SubmodelList' && aasEndpoint) {
+        } else if (currentRouteName === 'SubmodelList' && aasEndpoint) {
+            // Redirect to 'SubmodelList' with 'aas' parameter
             router.push({ name: 'SubmodelList', query: { aas: aasEndpoint } });
-        } else if (route.name === 'ComponentVisualization' && aasEndpoint && submodelElementPath) {
+        } else if (currentRouteName === 'ComponentVisualization' && aasEndpoint && submodelElementPath) {
+            // Redirect to 'ComponentVisualization' with 'aas' and 'path' parameters
             router.push({ name: 'ComponentVisualization', query: { aas: aasEndpoint, path: submodelElementPath } });
         } else {
+            // Redirect to 'AASList' without query parameters
             router.push({ name: 'AASList' });
         }
     }
 
     // Handle desktop view routing logic
     function handleDesktopView(aasEndpoint: string | null, submodelElementPath: string | null) {
-        if (route.name === 'AASList' || route.name === 'SubmodelList') {
-            if (aasEndpoint && submodelElementPath) {
-                router.push({ name: 'MainWindow', query: { aas: aasEndpoint, path: submodelElementPath } });
-            } else if (aasEndpoint) {
-                router.push({ name: 'MainWindow', query: { aas: aasEndpoint } });
-            } else {
-                router.push({ name: 'MainWindow' });
-            }
-        } else if (route.name === 'ComponentVisualization') {
-            if (aasEndpoint && submodelElementPath) {
-                router.push({ name: 'MainWindow', query: { aas: aasEndpoint, path: submodelElementPath } });
-            } else if (aasEndpoint) {
-                router.push({ name: 'MainWindow', query: { aas: aasEndpoint } });
-            } else {
-                router.push({ name: 'MainWindow' });
-            }
-        } else if (aasEndpoint && submodelElementPath) {
-            router.push({ name: 'MainWindow', query: { aas: aasEndpoint, path: submodelElementPath } });
-        } else if (aasEndpoint) {
-            router.push({ name: 'MainWindow', query: { aas: aasEndpoint } });
+        const currentRouteName = route.name;
+        const routesToMainWindow: Array<RouteRecordNameGeneric> = ['AASList', 'SubmodelList', 'ComponentVisualization'];
+        const query: any = {};
+
+        if (aasEndpoint) query.aas = aasEndpoint;
+        if (submodelElementPath) query.path = submodelElementPath;
+
+        if (currentRouteName && routesToMainWindow.includes(currentRouteName)) {
+            // Redirect to 'MainWindow' with appropriate query parameters
+            router.push({ name: 'MainWindow', query });
+        } else if (currentRouteName === 'AASViewer') {
+            // Stay on 'AASViewer' but update query parameters
+            router.push({ name: 'AASViewer', query });
         } else {
-            router.push({ name: 'MainWindow' });
+            // Default to 'MainWindow' with query parameters
+            router.push({ name: 'MainWindow', query });
         }
     }
 
